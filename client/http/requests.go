@@ -32,7 +32,14 @@ func (c *client) getAndParseL2HTTPResponse(path string, params map[string]any, r
 		q.Set(k, fmt.Sprintf("%v", v))
 	}
 	u.RawQuery = q.Encode()
-	resp, err := httpClient.Get(u.String())
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36")
+
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return err
 	}
